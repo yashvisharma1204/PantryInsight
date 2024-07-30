@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Paper, Grid } from "@mui/material";
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { db, auth } from "../firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import Navbar from '../components/Navbar'; // Import the Navbar component
@@ -10,24 +10,21 @@ import Navbar from '../components/Navbar'; // Import the Navbar component
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
 );
 
-// Function to create chart data
-const createChartData = (totalItems, expiredItems) => {
+// Function to create chart data for bar graphs
+const createBarChartData = (data, type) => {
   return {
-    labels: ['Total Items', 'Expired Items'],
+    labels: Object.keys(data),
     datasets: [
       {
-        label: 'Pantry Items Data',
-        data: [totalItems, expiredItems],
-        fill: false,
-        borderColor: '#0A6847',
-        tension: 0.1,
+        label: type === 'total' ? 'Total Items' : 'Expired Items',
+        data: Object.values(data).map(category => type === 'total' ? category.totalItems : category.expiredItems),
+        backgroundColor: type === 'total' ? '#0A6847' : '#DC0083',
       },
     ],
   };
@@ -41,7 +38,7 @@ const chartOptions = {
     },
     tooltip: {
       callbacks: {
-        label: function(tooltipItem) {
+        label: function (tooltipItem) {
           return `Value: ${tooltipItem.raw}`;
         }
       }
@@ -65,10 +62,9 @@ const chartOptions = {
 };
 
 export default function Dashboard() {
-  const [pantryItems, setPantryItems] = useState([]);
+  const [categoryData, setCategoryData] = useState({});
   const [totalItems, setTotalItems] = useState(0);
   const [expiredItems, setExpiredItems] = useState(0);
-  const [totalCategories, setTotalCategories] = useState(0);
 
   useEffect(() => {
     const fetchData = async (user) => {
@@ -78,21 +74,26 @@ export default function Dashboard() {
         const items = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         
         // Calculate metrics
-        const categories = new Set();
-        let expiredCount = 0;
+        const data = {};
+        let totalItemCount = 0;
+        let expiredItemCount = 0;
         const today = new Date();
 
         items.forEach(item => {
-          categories.add(item.category); // Assuming there's a category field
+          if (!data[item.category]) {
+            data[item.category] = { totalItems: 0, expiredItems: 0 };
+          }
+          data[item.category].totalItems += 1;
+          totalItemCount += 1;
           if (new Date(item.expirationDate) < today) {
-            expiredCount++;
+            data[item.category].expiredItems += 1;
+            expiredItemCount += 1;
           }
         });
 
-        setPantryItems(items);
-        setTotalItems(items.length);
-        setExpiredItems(expiredCount);
-        setTotalCategories(categories.size);
+        setCategoryData(data);
+        setTotalItems(totalItemCount);
+        setExpiredItems(expiredItemCount);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -102,10 +103,9 @@ export default function Dashboard() {
       if (user) {
         fetchData(user);
       } else {
-        setPantryItems([]);
+        setCategoryData({});
         setTotalItems(0);
         setExpiredItems(0);
-        setTotalCategories(0);
       }
     });
 
@@ -118,7 +118,7 @@ export default function Dashboard() {
       <Box
         sx={{
           paddingTop: "60px", // Adjust for the fixed navbar
-          backgroundColor: '#F6E9B2', // Light Yellow background
+          backgroundColor: '#000', // Light Yellow background
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
@@ -130,19 +130,19 @@ export default function Dashboard() {
           Dashboard
         </Typography>
 
-        <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-          <Grid item xs={12} sm={4}>
+        <Grid container spacing={3} sx={{ marginBottom: 3, justifyContent: 'center' }}>
+          <Grid item xs={12} sm={6}>
             <Paper
               sx={{
                 padding: 3,
-                backgroundColor: '#FFFFFF',
+                backgroundColor: '#212121',
                 borderRadius: 1,
                 boxShadow: 3,
                 textAlign: 'center',
               }}
             >
               <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
-                Total Items
+                Total Number of Products
               </Typography>
               <Typography variant="h4" sx={{ color: "#6C946F" }}>
                 {totalItems}
@@ -150,43 +150,50 @@ export default function Dashboard() {
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6}>
             <Paper
               sx={{
                 padding: 3,
-                backgroundColor: '#FFFFFF',
+                backgroundColor: '#212121',
                 borderRadius: 1,
                 boxShadow: 3,
                 textAlign: 'center',
               }}
             >
               <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
-                Expired Items
+                Total Expired Products
               </Typography>
               <Typography variant="h4" sx={{ color: "#DC0083" }}>
                 {expiredItems}
               </Typography>
             </Paper>
           </Grid>
+        </Grid>
 
-          <Grid item xs={12} sm={4}>
-            <Paper
-              sx={{
-                padding: 3,
-                backgroundColor: '#FFFFFF',
-                borderRadius: 1,
-                boxShadow: 3,
-                textAlign: 'center',
-              }}
-            >
-              <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
-                Total Categories
-              </Typography>
-              <Typography variant="h4" sx={{ color: "#7ABA78" }}>
-                {totalCategories}
-              </Typography>
-            </Paper>
-          </Grid>
+        <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+          {Object.keys(categoryData).map((category) => (
+            <Grid item xs={12} sm={4} key={category}>
+              <Paper
+                sx={{
+                  padding: 3,
+                  backgroundColor: '#212121',
+                  borderRadius: 1,
+                  boxShadow: 3,
+                  textAlign: 'center',
+                }}
+              >
+                <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
+                  {category}
+                </Typography>
+                <Typography variant="h6" gutterBottom sx={{ color: "#6C946F" }}>
+                  Total Items: {categoryData[category].totalItems}
+                </Typography>
+                <Typography variant="h6" gutterBottom sx={{ color: "#DC0083" }}>
+                  Expired Items: {categoryData[category].expiredItems}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
         </Grid>
 
         <Paper
@@ -194,12 +201,32 @@ export default function Dashboard() {
             padding: 3,
             maxWidth: '800px',
             width: '100%',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#212121',
+            borderRadius: 1,
+            boxShadow: 3,
+            marginBottom: 3,
+          }}
+        >
+          <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
+            Total Items by Category
+          </Typography>
+          <Bar data={createBarChartData(categoryData, 'total')} options={chartOptions} />
+        </Paper>
+
+        <Paper
+          sx={{
+            padding: 3,
+            maxWidth: '800px',
+            width: '100%',
+            backgroundColor: '#212121',
             borderRadius: 1,
             boxShadow: 3,
           }}
         >
-          <Line data={createChartData(totalItems, expiredItems)} options={chartOptions} />
+          <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
+            Expired Items by Category
+          </Typography>
+          <Bar data={createBarChartData(categoryData, 'expired')} options={chartOptions} />
         </Paper>
 
         <Box
