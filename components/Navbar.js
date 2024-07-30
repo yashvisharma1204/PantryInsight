@@ -45,6 +45,7 @@ const Navbar = () => {
             >
               <MenuIcon />
             </IconButton>
+            
           </Box>
 
           <Drawer
@@ -64,14 +65,20 @@ const Navbar = () => {
                 Pantry<b>Insight</b>
               </Typography>
               <List>
-                <ListItem button  href="/" onClick={toggleDrawer(false)}>
-                  <ListItemText primary="Home" />
+                <ListItem component={Link} onClick={toggleDrawer(false)}>
+                  <Button component={Link} href="/" sx={{ marginRight: 2, color: "#6C946F" }}>
+                    Home
+                  </Button>
                 </ListItem>
-                <ListItem button  href="/dashboard" onClick={toggleDrawer(false)}>
-                  <ListItemText primary="Dashboard" />
+                <ListItem component={Link} onClick={toggleDrawer(false)}>
+                  <Button component={Link} href="/dashboard" sx={{ marginRight: 2, color: "#6C946F" }}>
+                    Dashboard
+                  </Button>
                 </ListItem>
-                <ListItem button  href="/pantry" onClick={toggleDrawer(false)}>
-                  <ListItemText primary="Pantry" />
+                <ListItem component={Link} onClick={toggleDrawer(false)}>
+                  <Button component={Link} href="/pantry" sx={{ marginRight: 2, color: "#6C946F" }}>
+                    Pantry
+                  </Button>
                 </ListItem>
               </List>
             </Box>
