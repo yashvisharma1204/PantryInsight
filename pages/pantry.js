@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react";
 import { db, auth } from "../firebaseConfig";
 import { collection, addDoc, getDocs, deleteDoc, doc, query, where } from "firebase/firestore";
-import { Box, TextField, Button, List, ListItem, ListItemText, IconButton, Typography, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import { Box, TextField, Button, List, ListItem, ListItemText, IconButton, Typography, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit"; // Import Edit Icon
 import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "../components/Navbar"; // Import the Navbar component
+import Filter from '../pages/api/Filter'; // Import the Filter component
+import Search from '../pages/api/Search'; // Import the Search component
+import UpdateItem from './api/update';
 
 const Pantry = () => {
   const [pantryItems, setPantryItems] = useState([]);
   const [newItem, setNewItem] = useState({ name: "", quantity: "", expirationDate: "", category: "" });
   const [userId, setUserId] = useState(null);
   const [categories, setCategories] = useState(["Fruits", "Vegetables", "Dairy", "Meat", "Grains", "Snacks"]); // Sample categories
+  const [currentCategory, setCurrentCategory] = useState(''); // Current selected category for filtering
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false); // State to control UpdateItem dialog
+  const [selectedItem, setSelectedItem] = useState(null); // Selected item to be updated
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -65,6 +73,33 @@ const Pantry = () => {
     }
   };
 
+  const handleOpenUpdateDialog = (item) => {
+    setSelectedItem(item);
+    setOpenUpdateDialog(true);
+  };
+
+  const handleCloseUpdateDialog = () => {
+    setOpenUpdateDialog(false);
+    setSelectedItem(null);
+  };
+
+  // Filter pantry items based on the selected category
+  const filteredItems = currentCategory ? 
+    pantryItems.filter(item => item.category === currentCategory) : 
+    pantryItems;
+
+  // Filter pantry items based on the search query
+  const searchedItems = searchQuery ? 
+    filteredItems.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase())) : 
+    filteredItems;
+
+  // Check if the item is expired
+  const isExpired = (expirationDate) => {
+    const today = new Date();
+    const expDate = new Date(expirationDate);
+    return expDate < today;
+  };
+
   return (
     <>
       <Navbar /> {/* Include the Navbar */}
@@ -75,10 +110,14 @@ const Pantry = () => {
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '100vh',
-          backgroundColor: '#212121', // Light Yellow background
+          backgroundColor: '#212121', // Dark background
           padding: 3,
         }}
       >
+        <Search
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
         <Box
           sx={{
             display: 'flex',
@@ -177,16 +216,32 @@ const Pantry = () => {
               overflowY: 'auto', // Enable vertical scrolling
             }}
           >
-            <Typography variant="h5" gutterBottom sx={{ color: "#0A6847" }}>
-              Pantry Items
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h5" gutterBottom sx={{ color: "#0A6847", flexGrow: 1 }}>
+                Pantry Items
+              </Typography>
+              <Filter
+                categories={categories}
+                currentCategory={currentCategory}
+                onCategoryChange={setCurrentCategory}
+              />
+            </Box>
             <List>
-              {pantryItems.map((item) => (
-                <ListItem key={item.id}>
+              {searchedItems.map((item) => (
+                <ListItem
+                  key={item.id}
+                  sx={{
+                    backgroundColor: isExpired(item.expirationDate) ? 'IndianRed' : 'transparent', // Apply red background for expired items
+                    color: isExpired(item.expirationDate) ? 'white' : 'inherit', // Text color adjustment
+                  }}
+                >
                   <ListItemText
                     primary={item.name}
                     secondary={`Quantity: ${item.quantity}, Expiration Date: ${item.expirationDate}, Category: ${item.category}`}
                   />
+                  <IconButton edge="end" aria-label="edit" onClick={() => handleOpenUpdateDialog(item)}>
+                    <EditIcon sx={{ color: "#F3CA52" }} /> {/* Pencil Icon */}
+                  </IconButton>
                   <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteItem(item.id)}>
                     <DeleteIcon sx={{ color: "#DC0083" }} />
                   </IconButton>
@@ -196,6 +251,14 @@ const Pantry = () => {
           </Box>
         </Box>
       </Box>
+      {selectedItem && (
+        <UpdateItem
+          open={openUpdateDialog}
+          onClose={handleCloseUpdateDialog}
+          item={selectedItem}
+          fetchItems={fetchItems}
+        />
+      )}
     </>
   );
 };
