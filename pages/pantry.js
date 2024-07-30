@@ -1,16 +1,16 @@
-// pages/pantry.js
 import { useState, useEffect } from "react";
 import { db, auth } from "../firebaseConfig";
 import { collection, addDoc, getDocs, deleteDoc, doc, query, where } from "firebase/firestore";
-import { Box, TextField, Button, List, ListItem, ListItemText, IconButton, Typography } from "@mui/material";
+import { Box, TextField, Button, List, ListItem, ListItemText, IconButton, Typography, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "../components/Navbar"; // Import the Navbar component
 
 const Pantry = () => {
   const [pantryItems, setPantryItems] = useState([]);
-  const [newItem, setNewItem] = useState({ name: "", quantity: "", expirationDate: "" });
+  const [newItem, setNewItem] = useState({ name: "", quantity: "", expirationDate: "", category: "" });
   const [userId, setUserId] = useState(null);
+  const [categories, setCategories] = useState(["Fruits", "Vegetables", "Dairy", "Meat", "Grains", "Snacks"]); // Sample categories
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -40,7 +40,7 @@ const Pantry = () => {
 
   const handleAddItem = async () => {
     try {
-      if (!newItem.name || !newItem.quantity || !newItem.expirationDate || !userId) {
+      if (!newItem.name || !newItem.quantity || !newItem.expirationDate || !newItem.category || !userId) {
         console.error("Please fill out all fields and ensure you are logged in.");
         return;
       }
@@ -49,7 +49,7 @@ const Pantry = () => {
       const newItemWithId = { ...itemWithUserId, id: docRef.id };
       console.log("Added item:", newItemWithId); // Debug: Log added item
       setPantryItems([...pantryItems, newItemWithId]);
-      setNewItem({ name: "", quantity: "", expirationDate: "" });
+      setNewItem({ name: "", quantity: "", expirationDate: "", category: "" });
     } catch (err) {
       console.error("Error adding item: ", err);
     }
@@ -75,7 +75,7 @@ const Pantry = () => {
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '100vh',
-          backgroundColor: '#F6E9B2', // Light Yellow background
+          backgroundColor: '#212121', // Light Yellow background
           padding: 3,
         }}
       >
@@ -134,6 +134,19 @@ const Pantry = () => {
                 shrink: true,
               }}
             />
+            <FormControl fullWidth required sx={{ mt: 2 }}>
+              <InputLabel>Category</InputLabel>
+              <Select
+                value={newItem.category}
+                onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
+              >
+                {categories.map((category, index) => (
+                  <MenuItem key={index} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Button 
               onClick={handleAddItem} 
               variant="contained" 
@@ -160,6 +173,8 @@ const Pantry = () => {
               boxShadow: 3,
               textAlign: 'left',
               border: `1px solid #0A6847`, // Dark Green border
+              maxHeight: '450px', // Ensure this height matches or is less than the "Add New Item" box height
+              overflowY: 'auto', // Enable vertical scrolling
             }}
           >
             <Typography variant="h5" gutterBottom sx={{ color: "#0A6847" }}>
@@ -170,7 +185,7 @@ const Pantry = () => {
                 <ListItem key={item.id}>
                   <ListItemText
                     primary={item.name}
-                    secondary={`Quantity: ${item.quantity}, Expiration Date: ${item.expirationDate}`}
+                    secondary={`Quantity: ${item.quantity}, Expiration Date: ${item.expirationDate}, Category: ${item.category}`}
                   />
                   <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteItem(item.id)}>
                     <DeleteIcon sx={{ color: "#DC0083" }} />
