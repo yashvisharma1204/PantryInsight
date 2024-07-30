@@ -1,8 +1,7 @@
 // pages/index.js
 import { Box, Typography } from "@mui/material";
 import Navbar from "../components/Navbar";
-import BentoBox from "../components/BentoBox";
-import AnimatedSection from "../components/AnimatedSection";
+import AnimatedSection from "../components/AnimatedSection"; // Ensure this path is correct
 
 export default function Home() {
   return (
@@ -11,7 +10,7 @@ export default function Home() {
       <Box
         sx={{
           paddingTop: "60px", // Adjust for the fixed navbar
-          backgroundColor: '#F6E9B2', // Light Yellow background
+          backgroundColor: '#121212', // Light Yellow background
           minHeight: 'calc(100vh - 80px)', // Ensure footer is at bottom
           display: 'flex',
           flexDirection: 'column',
@@ -29,6 +28,11 @@ export default function Home() {
             flexWrap: 'wrap',
             maxWidth: '1200px', // Adjust as needed
             margin: '0 auto', // Center the content
+            '@media (max-width: 600px)': {
+              flexDirection: 'column', // Stack items vertically on small screens
+              padding: 1,
+              gap: 2,
+            }
           }}
         >
           <Box
@@ -36,20 +40,25 @@ export default function Home() {
               flex: 1,
               maxWidth: '48%', // Adjust max width as needed
               minWidth: '300px', // Ensure boxes are not too narrow
-              backgroundColor: '#FFFFFF', // White background for the box
+              backgroundColor: 'black', // White background for the box
               borderRadius: 1,
               boxShadow: 3,
               padding: 3,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
+              color: '#f3f3f3',
+              '@media (max-width: 600px)': {
+                maxWidth: '100%', // Full width on small screens
+                marginBottom: 2, // Space between stacked boxes
+              }
             }}
           >
             <Typography variant="h5" gutterBottom sx={{ color: "#0A6847" }}>
-              About PantryInsight
+              About Pantry<b>Insight</b>
             </Typography>
             <Typography variant="body1" gutterBottom>
-            PantryInsight is your ultimate solution for managing pantry items. Easily add, view, and remove items, and track expiration dates to keep your pantry organized and efficient.
+              Pantry<b>Insight</b> is your ultimate solution for managing pantry items. Easily add, view, and remove items, and track expiration dates to keep your pantry organized and efficient.
             </Typography>
             <Typography variant="body1">
               Our intuitive interface helps you manage your kitchen supplies effortlessly, ensuring you never run out of essential items.
@@ -61,26 +70,31 @@ export default function Home() {
               flex: 1,
               maxWidth: '48%', // Adjust max width as needed
               minWidth: '300px', // Ensure boxes are not too narrow
-              backgroundColor: '#FFFFFF', // White background for the box
+              backgroundColor: 'black', // White background for the box
               borderRadius: 1,
               boxShadow: 3,
               padding: 3,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
+              color: '#f3f3f3',
+              '@media (max-width: 600px)': {
+                maxWidth: '100%', // Full width on small screens
+                marginBottom: 2, // Space between stacked boxes
+              }
             }}
           >
             <Typography variant="h5" gutterBottom sx={{ color: "#0A6847" }}>
               Features
             </Typography>
             <Typography variant="body1" gutterBottom>
-              - Add new items to your pantry with details such as quantity and expiration date.
+              1. Add new items to your pantry with details such as quantity and expiration date.
             </Typography>
             <Typography variant="body1">
-              - View and manage your pantry items with a user-friendly interface.
+              2. View and manage your pantry items with a user-friendly interface.
             </Typography>
             <Typography variant="body1">
-              - Get reminders before items expire.
+              3. Get reminders before items expire.
             </Typography>
           </Box>
         </Box>
@@ -88,7 +102,7 @@ export default function Home() {
         <Box
           sx={{
             marginTop: 'auto', // Pushes footer to the bottom
-            backgroundColor: '#0A6847', // Footer background color
+            backgroundColor: 'black', // Footer background color
             color: '#F6E9B2', // Footer text color
             padding: 2.4,
             textAlign: 'center',
