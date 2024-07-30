@@ -39,7 +39,7 @@ const Navbar = () => {
             </Typography>
             <IconButton 
               edge="end" 
-              color="inherit" 
+              color='primary' 
               aria-label="menu" 
               onClick={toggleDrawer(true)}
             >
@@ -64,13 +64,13 @@ const Navbar = () => {
                 Pantry<b>Insight</b>
               </Typography>
               <List>
-                <ListItem button component={Link} href="/" onClick={toggleDrawer(false)}>
+                <ListItem button  href="/" onClick={toggleDrawer(false)}>
                   <ListItemText primary="Home" />
                 </ListItem>
-                <ListItem button component={Link} href="/dashboard" onClick={toggleDrawer(false)}>
+                <ListItem button  href="/dashboard" onClick={toggleDrawer(false)}>
                   <ListItemText primary="Dashboard" />
                 </ListItem>
-                <ListItem button component={Link} href="/pantry" onClick={toggleDrawer(false)}>
+                <ListItem button  href="/pantry" onClick={toggleDrawer(false)}>
                   <ListItemText primary="Pantry" />
                 </ListItem>
               </List>
