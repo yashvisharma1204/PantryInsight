@@ -36,7 +36,7 @@ const Auth = () => {
         justifyContent: 'center',
         minHeight: '100vh',
         textAlign: 'center',
-        backgroundColor: '#F0F4F8', // Background color
+        backgroundColor: '#000', // Background color
         padding: 3,
       }}
     >
@@ -47,10 +47,11 @@ const Auth = () => {
           width: '100%',
           maxWidth: '500px',
           padding: 3,
-          backgroundColor: '#fff', // Form background color
+          backgroundColor: '#212121', // Form background color
           borderRadius: 1,
           boxShadow: 3,
           textAlign: 'left',
+          color: "white"
         }}
       >
         <Typography variant="h4" gutterBottom sx={{ color: "#6C946F" }}>
@@ -69,6 +70,7 @@ const Auth = () => {
           fullWidth
           required
           sx={{ mt: 2 }}
+          InputLabelProps={{ sx: { color: 'white' } }} // Change label color to white
         />
         <TextField
           label="Password"
@@ -78,6 +80,7 @@ const Auth = () => {
           fullWidth
           required
           sx={{ mt: 2 }}
+          InputLabelProps={{ sx: { color: 'white' } }} // Change label color to white
         />
         <Button 
           type="submit" 
