@@ -45,7 +45,7 @@ const Auth = () => {
         onSubmit={handleSubmit}
         sx={{
           width: '100%',
-          maxWidth: '500px',
+          maxWidth: '400px',
           padding: 3,
           backgroundColor: '#212121', // Form background color
           borderRadius: 1,
@@ -54,7 +54,10 @@ const Auth = () => {
           color: "white"
         }}
       >
-        <Typography variant="h4" gutterBottom sx={{ color: "#6C946F" }}>
+        <Typography variant="h4" gutterBottom sx={{ color: "#6C946F" , '@media (max-width: 600px)': {
+            fontSize:25,
+            fontWeight:'bold'
+          }}}>
           {isRegistering ? "Register" : "Login"}
         </Typography>
         {error && (
@@ -69,8 +72,14 @@ const Auth = () => {
           onChange={(e) => setEmail(e.target.value)}
           fullWidth
           required
-          sx={{ mt: 2 }}
-          InputLabelProps={{ sx: { color: 'white' } }} // Change label color to white
+          sx={{ mt: 2 ,'@media (max-width: 600px)': {
+            fontSize:5,
+            fontWeight:'bold'
+          }}}
+          InputLabelProps={{ sx: { color: 'white' }, '@media (max-width: 600px)': {
+            fontSize:5,
+            fontWeight:'bold',
+          }}} // Change label color to white
         />
         <TextField
           label="Password"
@@ -80,7 +89,13 @@ const Auth = () => {
           fullWidth
           required
           sx={{ mt: 2 }}
-          InputLabelProps={{ sx: { color: 'white' } }} // Change label color to white
+          InputLabelProps={{ sx: 
+            { color: 'white' },
+            '@media (max-width: 600px)': {
+            fontSize:5,
+            fontWeight:'bold'
+          }         
+          }} // Change label color to white
         />
         <Button 
           type="submit" 
@@ -107,7 +122,10 @@ const Auth = () => {
               backgroundColor: "#DC0083", // Button hover color
               color: "#fff" // Button text color on hover
             },
-            mt: 2
+            mt: 2,
+            '@media (max-width: 600px)': {
+            fontSize:10,
+          }
           }}
         >
           {isRegistering ? "Already have an account? Login" : "Don't have an account? Register"}
