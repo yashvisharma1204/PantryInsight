@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Paper, Grid } from "@mui/material";
+import { Box, Typography, Paper, Grid, useMediaQuery } from "@mui/material";
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { db, auth } from "../firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import Navbar from '../components/Navbar'; // Import the Navbar component
+import { Height } from "@mui/icons-material";
 
 // Register the components you are using
 ChartJS.register(
@@ -25,6 +26,7 @@ const createBarChartData = (data, type) => {
         label: type === 'total' ? 'Total Items' : 'Expired Items',
         data: Object.values(data).map(category => type === 'total' ? category.totalItems : category.expiredItems),
         backgroundColor: type === 'total' ? '#0A6847' : '#DC0083',
+        
       },
     ],
   };
@@ -65,6 +67,9 @@ export default function Dashboard() {
   const [categoryData, setCategoryData] = useState({});
   const [totalItems, setTotalItems] = useState(0);
   const [expiredItems, setExpiredItems] = useState(0);
+  
+  // Determine if the screen size is less than 600px
+  const isSmallScreen = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     const fetchData = async (user) => {
@@ -123,10 +128,10 @@ export default function Dashboard() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: 3,
+          padding: isSmallScreen ? 2 : 3, // Adjust padding for small screens
         }}
       >
-        <Typography variant="h4" gutterBottom sx={{ color: "#0A6847" }}>
+        <Typography variant={isSmallScreen ? "h5" : "h4"} gutterBottom sx={{ color: "#0A6847" }}>
           Dashboard
         </Typography>
 
@@ -134,17 +139,17 @@ export default function Dashboard() {
           <Grid item xs={12} sm={6}>
             <Paper
               sx={{
-                padding: 3,
+                padding: isSmallScreen ? 2 : 3, // Adjust padding for small screens
                 backgroundColor: '#212121',
                 borderRadius: 1,
                 boxShadow: 3,
                 textAlign: 'center',
               }}
             >
-              <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
+              <Typography variant={isSmallScreen ? "subtitle1" : "h6"} gutterBottom sx={{ color: "#0A6847" }}>
                 Total Number of Products
               </Typography>
-              <Typography variant="h4" sx={{ color: "#6C946F" }}>
+              <Typography variant={isSmallScreen ? "h5" : "h4"} sx={{ color: "#6C946F" }}>
                 {totalItems}
               </Typography>
             </Paper>
@@ -153,17 +158,17 @@ export default function Dashboard() {
           <Grid item xs={12} sm={6}>
             <Paper
               sx={{
-                padding: 3,
+                padding: isSmallScreen ? 2 : 3, // Adjust padding for small screens
                 backgroundColor: '#212121',
                 borderRadius: 1,
                 boxShadow: 3,
                 textAlign: 'center',
               }}
             >
-              <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
+              <Typography variant={isSmallScreen ? "subtitle1" : "h6"} gutterBottom sx={{ color: "#0A6847" }}>
                 Total Expired Products
               </Typography>
-              <Typography variant="h4" sx={{ color: "#DC0083" }}>
+              <Typography variant={isSmallScreen ? "h5" : "h4"} sx={{ color: "#DC0083" }}>
                 {expiredItems}
               </Typography>
             </Paper>
@@ -175,20 +180,20 @@ export default function Dashboard() {
             <Grid item xs={12} sm={4} key={category}>
               <Paper
                 sx={{
-                  padding: 3,
+                  padding: isSmallScreen ? 2 : 3, // Adjust padding for small screens
                   backgroundColor: '#212121',
                   borderRadius: 1,
                   boxShadow: 3,
                   textAlign: 'center',
                 }}
               >
-                <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
+                <Typography variant={isSmallScreen ? "subtitle1" : "h6"} gutterBottom sx={{ color: "#0A6847" }}>
                   {category}
                 </Typography>
-                <Typography variant="h6" gutterBottom sx={{ color: "#6C946F" }}>
+                <Typography variant={isSmallScreen ? "body2" : "h6"} gutterBottom sx={{ color: "#6C946F" }}>
                   Total Items: {categoryData[category].totalItems}
                 </Typography>
-                <Typography variant="h6" gutterBottom sx={{ color: "#DC0083" }}>
+                <Typography variant={isSmallScreen ? "body2" : "h6"} gutterBottom sx={{ color: "#DC0083" }}>
                   Expired Items: {categoryData[category].expiredItems}
                 </Typography>
               </Paper>
@@ -198,7 +203,7 @@ export default function Dashboard() {
 
         <Paper
           sx={{
-            padding: 3,
+            padding: isSmallScreen ? 2 : 3, // Adjust padding for small screens
             maxWidth: '800px',
             width: '100%',
             backgroundColor: '#212121',
@@ -207,7 +212,7 @@ export default function Dashboard() {
             marginBottom: 3,
           }}
         >
-          <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
+          <Typography variant={isSmallScreen ? "subtitle1" : "h6"} gutterBottom sx={{ color: "#0A6847" }}>
             Total Items by Category
           </Typography>
           <Bar data={createBarChartData(categoryData, 'total')} options={chartOptions} />
@@ -215,7 +220,7 @@ export default function Dashboard() {
 
         <Paper
           sx={{
-            padding: 3,
+            padding: isSmallScreen ? 2 : 3, // Adjust padding for small screens
             maxWidth: '800px',
             width: '100%',
             backgroundColor: '#212121',
@@ -223,7 +228,7 @@ export default function Dashboard() {
             boxShadow: 3,
           }}
         >
-          <Typography variant="h6" gutterBottom sx={{ color: "#0A6847" }}>
+          <Typography variant={isSmallScreen ? "subtitle1" : "h6"} gutterBottom sx={{ color: "#0A6847" }}>
             Expired Items by Category
           </Typography>
           <Bar data={createBarChartData(categoryData, 'expired')} options={chartOptions} />
@@ -234,9 +239,9 @@ export default function Dashboard() {
             marginTop: 'auto', // Pushes footer to the bottom
             backgroundColor: '#0A6847', // Footer background color
             color: '#F6E9B2', // Footer text color
-            padding: 2,
+            padding: isSmallScreen ? 1 : 2, // Adjust padding for small screens
             textAlign: 'center',
-            fontSize: '0.875rem', // Smaller font size
+            fontSize: isSmallScreen ? '0.75rem' : '0.875rem', // Smaller font size for small screens
           }}
         >
           <Typography variant="body2">
