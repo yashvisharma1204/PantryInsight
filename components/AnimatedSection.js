@@ -3,7 +3,7 @@ import { Box, Typography, Button } from "@mui/material";
 import Image from 'next/image';
 import image from '../public/image 2.png'; // Ensure this path is correct
 
-const imagesArray = [image, image]; // Create an array with three instances of the image
+const imagesArray = [image, image]; // Create an array with two instances of the image
 
 const AnimatedSection = () => (
   <Box
@@ -13,6 +13,7 @@ const AnimatedSection = () => (
       alignItems: "center",
       justifyContent: "center",
       minHeight: "60vh",
+      maxHeight: "110vh", // Ensure it doesn't grow beyond viewport height
       textAlign: "center",
       backgroundColor: 'black',
       padding: 0,
@@ -29,6 +30,10 @@ const AnimatedSection = () => (
         '0%': { transform: 'translateY(0)' },
         '50%': { transform: 'translateY(-20px)' },
         '100%': { transform: 'translateY(0)' }
+      },
+      '@media (max-width: 600px)': {
+        minHeight: '100px', // Allow height to adjust based on content
+        maxHeight: '500px', // Limit height to 500px on smaller screens// Add scroll if content exceeds height
       }
     }}
   >
@@ -43,7 +48,12 @@ const AnimatedSection = () => (
         justifyContent: "space-around", // Distribute images evenly
         alignItems: "center",
         animation: "float 3s ease-in-out infinite",
-        zIndex: 0 // Ensure the image is at the lowest z-index
+        zIndex: 0, // Ensure the image is at the lowest z-index
+        '@media (max-width: 600px)': {
+        minHeight: 'auto', // Allow height to adjust based on content
+        maxHeight: '500px', // Limit height to 500px on smaller screens
+        overflowY: 'auto' // Add scroll if content exceeds height
+      }
       }}
     >
       {imagesArray.map((img, index) => (
@@ -67,6 +77,10 @@ const AnimatedSection = () => (
         backgroundColor:'rgba(0,0,0,0.8)',
         padding:2,
         borderRadius:3,
+        '@media (max-width: 600px)': {
+          padding:16,
+            fontSize:25,
+          }
       }}
     >
       PantryInsight
@@ -80,6 +94,9 @@ const AnimatedSection = () => (
         backgroundColor:'rgba(0,0,0,0.8)',
         padding:2,
         borderRadius:3,
+        '@media (max-width: 600px)': {
+            fontSize:15,
+          }
       }}
     >
       Organize Your Pantry Effortlessly
@@ -92,6 +109,9 @@ const AnimatedSection = () => (
           color: "#000", 
           '&:hover': {
             backgroundColor: "#FFA823"
+          },
+          '@media (max-width: 600px)': {
+            fontSize:10,
           }
         }}
         href="/auth"
@@ -108,6 +128,9 @@ const AnimatedSection = () => (
             backgroundColor: "#DC0083", 
             color: "#fff",
             border: 'none',
+          },
+          '@media (max-width: 600px)': {
+            fontSize:10,
           }
         }}
         href="/auth"
