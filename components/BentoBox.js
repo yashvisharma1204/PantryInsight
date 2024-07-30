@@ -7,7 +7,7 @@ const BentoBox = ({ title, children }) => (
       width: "100%",
       maxWidth: 600,
       padding: 3,
-      backgroundColor: "#000",
+      backgroundColor: "black",
       borderRadius: 1,
       boxShadow: 3,
       marginBottom: 3,
