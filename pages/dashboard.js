@@ -5,7 +5,6 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import { db, auth } from "../firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import Navbar from '../components/Navbar'; // Import the Navbar component
-import { Height } from "@mui/icons-material";
 
 // Register the components you are using
 ChartJS.register(
@@ -26,7 +25,6 @@ const createBarChartData = (data, type) => {
         label: type === 'total' ? 'Total Items' : 'Expired Items',
         data: Object.values(data).map(category => type === 'total' ? category.totalItems : category.expiredItems),
         backgroundColor: type === 'total' ? '#0A6847' : '#DC0083',
-        
       },
     ],
   };
@@ -34,6 +32,7 @@ const createBarChartData = (data, type) => {
 
 const chartOptions = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: 'top',
@@ -144,6 +143,7 @@ export default function Dashboard() {
                 borderRadius: 1,
                 boxShadow: 3,
                 textAlign: 'center',
+                marginTop: isSmallScreen? 3 : 'none',
               }}
             >
               <Typography variant={isSmallScreen ? "subtitle1" : "h6"} gutterBottom sx={{ color: "#0A6847" }}>
@@ -204,50 +204,37 @@ export default function Dashboard() {
         <Paper
           sx={{
             padding: isSmallScreen ? 2 : 3, // Adjust padding for small screens
-            maxWidth: '800px',
-            width: '100%',
             backgroundColor: '#212121',
             borderRadius: 1,
             boxShadow: 3,
             marginBottom: 3,
+            maxHeight: isSmallScreen?'50vh':'800px',
+            width: isSmallScreen?'80vw':'100%',
           }}
         >
           <Typography variant={isSmallScreen ? "subtitle1" : "h6"} gutterBottom sx={{ color: "#0A6847" }}>
             Total Items by Category
           </Typography>
-          <Bar data={createBarChartData(categoryData, 'total')} options={chartOptions} />
+          <Bar data={createBarChartData(categoryData, 'total')} options={chartOptions} height={200} />
         </Paper>
 
         <Paper
           sx={{
             padding: isSmallScreen ? 2 : 3, // Adjust padding for small screens
-            maxWidth: '800px',
-            width: '100%',
+            maxHeight: isSmallScreen?'50vh':'800px',
+            width: isSmallScreen?'80vw':'100%',
             backgroundColor: '#212121',
             borderRadius: 1,
             boxShadow: 3,
+            fontSize:'2'
           }}
         >
           <Typography variant={isSmallScreen ? "subtitle1" : "h6"} gutterBottom sx={{ color: "#0A6847" }}>
             Expired Items by Category
           </Typography>
-          <Bar data={createBarChartData(categoryData, 'expired')} options={chartOptions} />
+          <Bar data={createBarChartData(categoryData, 'expired')} options={chartOptions} height={200} />
         </Paper>
-
-        <Box
-          sx={{
-            marginTop: 'auto', // Pushes footer to the bottom
-            backgroundColor: '#0A6847', // Footer background color
-            color: '#F6E9B2', // Footer text color
-            padding: isSmallScreen ? 1 : 2, // Adjust padding for small screens
-            textAlign: 'center',
-            fontSize: isSmallScreen ? '0.75rem' : '0.875rem', // Smaller font size for small screens
-          }}
-        >
-          <Typography variant="body2">
-            ©2024 All rights reserved.
-          </Typography>
-        </Box>
+        <br></br>
       </Box>
     </>
   );
