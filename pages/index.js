@@ -11,7 +11,7 @@ export default function Home() {
       <Box
         sx={{
           paddingTop: "60px", // Adjust for the fixed navbar
-          backgroundColor: '#121212', // Light Yellow background
+          backgroundColor: '#000', // Light Yellow background
           minHeight: 'calc(100vh - 80px)', // Ensure footer is at bottom
           display: 'flex',
           flexDirection: 'column',
@@ -41,7 +41,7 @@ export default function Home() {
               flex: 1,
               maxWidth: isSmallScreen ? '300px' : '48%', // Adjust max width as needed
               minWidth: isSmallScreen ? '300px' : '300px', // Ensure boxes are not too narrow
-              backgroundColor: 'black', // Background color for the box
+              backgroundColor: '#121212', // Background color for the box
               borderRadius: 1,
               boxShadow: 3,
               padding: 3,
@@ -69,7 +69,7 @@ export default function Home() {
               flex: 1,
               maxWidth: isSmallScreen ? '300px' : '48%', // Adjust max width as needed
               minWidth: isSmallScreen ? '300px' : '300px', // Ensure boxes are not too narrow
-              backgroundColor: 'black', // Background color for the box
+              backgroundColor: '#121212', // Background color for the box
               borderRadius: 1,
               boxShadow: 3,
               padding: 3,
