@@ -2,6 +2,7 @@
     "name": "pantry-tracker",
     "version": "1.0.0",
     "scripts": {
+        "postinstall": "npm install formidable",
         "dev": "next dev",
         "build": "next build",
         "start": "next start"
