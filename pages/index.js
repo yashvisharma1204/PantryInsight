@@ -1,5 +1,5 @@
 // pages/index.js
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import Navbar from "../components/Navbar";
 import AnimatedSection from "../components/AnimatedSection"; // Ensure this path is correct
 
