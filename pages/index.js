@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import AnimatedSection from "../components/AnimatedSection"; // Ensure this path is correct
 
 export default function Home() {
+  const isSmallScreen = useMediaQuery('(max-width:600px)');
   return (
     <>
       <Navbar />
