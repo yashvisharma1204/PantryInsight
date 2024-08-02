@@ -18,6 +18,7 @@ export default function Home() {
         }}
       >
         <AnimatedSection />
+        <br />
         <Box
           sx={{
             display: 'flex',
