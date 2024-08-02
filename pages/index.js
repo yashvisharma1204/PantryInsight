@@ -39,8 +39,8 @@ export default function Home() {
           <Box
             sx={{
               flex: 1,
-              maxWidth: isSmallScreen ? '200px' : '48%', // Adjust max width as needed
-              minWidth: isSmallScreen ? '200px' : '300px', // Ensure boxes are not too narrow
+              maxWidth: isSmallScreen ? '300px' : '48%', // Adjust max width as needed
+              minWidth: isSmallScreen ? '300px' : '300px', // Ensure boxes are not too narrow
               backgroundColor: 'black', // Background color for the box
               borderRadius: 1,
               boxShadow: 3,
@@ -53,13 +53,13 @@ export default function Home() {
               overflow: 'visible', // Ensure all text is visible
             }}
           >
-            <Typography variant={isSmallScreen ? "body2" : "h5"} gutterBottom sx={{ color: "#0A6847" }}>
+            <Typography variant={isSmallScreen ? "h5" : "h5"} gutterBottom sx={{ color: "#0A6847" }}>
               About Pantry<b>Insight</b>
             </Typography>
-            <Typography variant="body2" gutterBottom sx={{ fontSize: isSmallScreen ? '0.8rem' : '1rem' }}>
+            <Typography variant="body2" gutterBottom sx={{ fontSize: isSmallScreen ? '0.9rem' : '1rem' }}>
               Pantry<b>Insight</b> is your ultimate solution for managing pantry items. Easily add, view, and remove items, and track expiration dates to keep your pantry organized and efficient.
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: isSmallScreen ? '0.8rem' : '1rem' }}>
+            <Typography variant="body2" sx={{ fontSize: isSmallScreen ? '0.9rem' : '1rem' }}>
               Our intuitive interface helps you manage your kitchen supplies effortlessly, ensuring you never run out of essential items.
             </Typography>
           </Box>
@@ -67,8 +67,8 @@ export default function Home() {
           <Box
             sx={{
               flex: 1,
-              maxWidth: isSmallScreen ? '200px' : '48%', // Adjust max width as needed
-              minWidth: isSmallScreen ? '200px' : '300px', // Ensure boxes are not too narrow
+              maxWidth: isSmallScreen ? '300px' : '48%', // Adjust max width as needed
+              minWidth: isSmallScreen ? '300px' : '300px', // Ensure boxes are not too narrow
               backgroundColor: 'black', // Background color for the box
               borderRadius: 1,
               boxShadow: 3,
@@ -85,16 +85,16 @@ export default function Home() {
               }
             }}
           >
-            <Typography variant={isSmallScreen ? "body2" : "h5"} gutterBottom sx={{ color: "#0A6847" }}>
+            <Typography variant={isSmallScreen ? "h5" : "h5"} gutterBottom sx={{ color: "#0A6847" }}>
               Features
             </Typography>
-            <Typography variant="body2" gutterBottom sx={{ fontSize: isSmallScreen ? '0.8rem' : '1rem' }}>
+            <Typography variant="body2" gutterBottom sx={{ fontSize: isSmallScreen ? '0.9rem' : '1rem' }}>
               1. Add new items to your pantry with details such as quantity and expiration date.
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: isSmallScreen ? '0.8rem' : '1rem' }}>
+            <Typography variant="body2" sx={{ fontSize: isSmallScreen ? '0.9rem' : '1rem' }}>
               2. View and manage your pantry items with a user-friendly interface.
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: isSmallScreen ? '0.8rem' : '1rem' }}>
+            <Typography variant="body2" sx={{ fontSize: isSmallScreen ? '0.9rem' : '1rem' }}>
               3. Get reminders before items expire.
             </Typography>
           </Box>
